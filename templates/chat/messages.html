@@ -1,0 +1,187 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Konera | Messages</title>
+  <link rel="stylesheet" href="{% static 'CSS/style.css'%}">
+  <link rel="stylesheet" href="{% static 'CSS/header.css'%}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <style>
+    #datetime{
+      display: none;
+    /* transition: opacity 0.5s linear; */
+    }
+  </style>
+</head><body>
+  {% if user.is_authenticated %} 
+  <input type="hidden" id="logged-in-user" value="{{ user.id }}">
+  <div class="thread" chat_id={{thread.id}}></div>
+  {%endif%}
+  <div class="header1"></div>
+  <header class="header">
+    <a href="" class="logo">Konera</a>
+    <input class="menu-btn" type="checkbox" id="menu-btn" />
+    <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
+    <ul class="menu">
+      <li><a href="{% url 'home'%}">Home</a></li>
+      <li><a href="{% url 'users'%}">Friends</a></li>
+      <li><a href="{% url 'feedback'%}">Feedback</a></li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul> 
+  </header>
+  </div>
+  <div class="adver">Hii this is for ad purpose</div>
+
+  <a href="users.html">
+    <p><i class="arrow left"></i></p>
+  </a>
+  <div class="body">
+  <div class="wrapper">
+    <section class="chat-area">
+      <header>
+                <a href="{% url 'users'%}" class="back-icon"><i class="fas fa-arrow-left"></i></a>
+        <img src="../..{{profile.profile_pic.url}}" alt="">
+        <!-- <img src="https://media.tacdn.com/media/attractions-splice-spp-674x446/09/c3/33/97.jpg" alt=""> -->
+        <div class="details">
+          {% if thread.first_person == user %}
+            <span>{{ thread.second_person.user.username }}</span>
+            {% else %}
+            <span>{{ thread.first_person.user.username }}</span>
+            {% endif %}
+        </div>
+      </header>
+      {% if count == 0%} 
+      <div class="chat-box" id="display" style="justify-content: center;">
+        <div class="body">
+          <div class="global-container">
+              <div class="card login-form">
+              <div class="card-body">
+                  <h3 class="card-title text-center">Start a Conversation,</h3>
+                  <div class="card-text text-center">
+                    by Saying Hello.
+                  </div>
+              </div>
+          </div>
+          </div>
+      </div>
+        {% else %}
+      <div class="chat-box" id="display">
+        {% endif %}
+
+        <!-- <div class="chat incoming">
+        <img src="IMG_-887pyy.jpg" alt="">
+        <div class="details">
+            <p>hii buddy how are you</p>
+        </div>
+        </div><div class="chat outgoing">
+        <div class="details">
+            <p>I am good dear how are you?</p>
+        </div>
+        </div> -->
+      </div>
+      {% if count == 0 %}
+      {{pass}}
+      {% else %}        
+        <script>  
+chatBox = document.querySelector(".chat-box");
+
+          $(document).ready(function () {
+      
+            setInterval(function () {
+              $.ajax({
+                type: 'GET',
+                url: "/getmessages/{{thread.id}}",
+                success: function (response) {
+                  console.log(response);
+                  $("#display").empty();
+                  for (var key in response.messages) {
+                    if (response.messages[key].sender == '{{request.user}}') {
+                      var temp = "<div class='chat outgoing'> <div class='details'><p>"+ response.messages[key].message+"</p><span id='datetime'>" + response.messages[key].date + "</span></div></div>";
+                        $("#display").append(temp);
+                    }
+                    else {
+                      var temp = "<div class='chat incoming'><img src='../..{{profile.profile_pic.url}}' alt=''><div class='details'><p>"+ response.messages[key].message+"</p><span id='datetime'>" + response.messages[key].date + "</span></div>";
+                              $("#display").append(temp);
+                    }
+                  }
+                  
+                },
+                error: function (response) {
+                  alert('An error occured')
+                }
+                
+                
+              });
+            }, 1000);
+          })
+          </script>
+          {% endif %}
+      <form action="#" id="post-form" class="typing-area" method="POST">
+      {% csrf_token %}
+        <input type="hidden" name="username" id="username" value="{{request.user}}"/>
+        <input type="hidden" name="friend" id="friend" value="{{thread.id}}"/>
+        <input type="text" class="incoming_id" name="incoming_id" value="1200993797" hidden>
+        <input type="text" name="message" class="input-field" id="message" placeholder="Type a message here..." autocomplete="off">
+        <button type="submit" class="active"><i class="fab fa-telegram-plane"></i></button>
+      </form> 
+    </section>
+  </div>
+</div>
+  <!-- <script src="{% static 'javascript/chat.js'%}"></script> -->
+<script type="text/javascript">
+
+ </script>
+</body>
+<script type="text/javascript">
+
+  $(document).ready(function () {
+    $(document).on('submit', '#post-form', function (e) {
+      e.preventDefault();
+
+      $.ajax({
+        type: 'POST',
+        url: '/thekonera',
+        data: {
+          username: $('#username').val(),
+          friend: $('#friend').val(),
+          message: $('#message').val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function (data) {
+          //alert(data)
+        },
+        error: function (data) {
+          // there was an error.
+          alert("An error occured!");  
+        }
+        
+      });
+      if ( '{{count}}' == 0){
+        location.reload()
+      }
+      document.getElementById('message').value = '';
+      scrollToBottom();
+
+    });
+  })
+    function scrollToBottom(){
+              chatBox.scrollTop = chatBox.scrollHeight;
+            }
+   
+</script>
+</html>

@@ -1,0 +1,29 @@
+{% extends 'base.html'%}
+
+{% block content%}
+<div class="body">
+    <div class="wrapper">
+      <section class="form login">
+        <header>Feedback</header>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="error-text">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        <form action="#" method="POST" enctype="multipart/form-data" autocomplete="off">
+          {% csrf_token %}
+          <div class="field input">
+            <label>Write down your Precious Feedback.</label>
+            <textarea name="feedback" id="" cols="30" rows="10" required></textarea>
+            <!-- <input type="text" class="feedback" name="username" placeholder="Enter your feedback" required> -->
+          </div>
+          
+          <div class="field button">
+            <input type="submit" name="submit" value="Submit">
+          </div>
+        </form>
+  
+      </section>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html'%}
+{% load static %}
+ {% block content %}
+<div class="body">
+    <div class="wrapper">
+      <section class="form signup">
+        <header>Registration</header>
+        {% if messages %}
+            {% for message in messages %}
+              <div class="error-text">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <form action="#" method="POST" enctype="multipart/form-data" autocomplete="off">
+          {% csrf_token%}
+          <div class="name-details">
+            <div class="field input">
+              <!-- Application Number -->
+              <label>Application Number</label>
+              <input type="number" name="ano" placeholder="Application number" >
+            </div>
+            <div class="field input">
+              <!-- Username -->
+              <label>Username</label>
+              <input type="text" name="username" placeholder="Username" >
+            </div>
+          </div>
+          <div class="name-details">
+            <div class="field input">
+              <!-- Full name -->
+              <label>Full Name</label>
+              <input type="text" name="name" placeholder="Full name" >
+            </div>
+            <div class="field input">
+              <!-- Email -->
+              <label>Email Address</label>
+              <input type="email" name="email" placeholder="Enter your email" >
+            </div>
+          </div>
+          <div class="name-details">
+            <div class="field input">
+              <!-- Date of Examination -->
+              <label>Date of Examination</label>
+              <input type="date" name="date_of_exam" placeholder="Date of Examination" >
+            </div>
+            <div class="field input">
+              <!-- User Address -->
+              <label>Your City Name</label>
+              <input type="text" name="your_address" placeholder="Your city name" >
+            </div>
+          </div>
+          <div class="field input">
+            <!-- Exam Venue -->
+            <label>Exam Venue</label>
+            <input type="text" name="venue" placeholder="Exam venue" >
+          </div>
+          <div class="field input">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter new password" >
+            <i class="fas fa-eye"></i>
+          </div>
+          <div class="field image">
+            <label>Select Image</label>
+            <input type="file" name="image" accept="image/x-png,image/gif,image/jpeg,image/jpg" >
+          </div>
+          <div class="field button">
+            <input type="submit" name="submit"value="Sign up">
+          </div>
+        </form>
+        <div class="link">Already signed up? <a href="{% url 'login_attempt'%}">Login now</a></div>
+      </section>
+    </div>
+  </div>
+  
+  
+    <script src="{% static 'javascript/pass-show-hide.js'%}"></script> 
+{% endblock %}

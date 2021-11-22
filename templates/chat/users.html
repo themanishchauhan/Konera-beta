@@ -1,0 +1,130 @@
+{% extends 'base.html'%}
+{% block css %} <style>.error-text{
+  color: #721c24;
+  padding: 8px 10px;
+  text-align: center;
+  border-radius: 5px;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  margin-bottom: 10px;
+}
+/* .autocomplete-result-list{
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
+  visibility: visible;
+  pointer-events: auto;
+  top: 100%;
+}
+.autocomplete-result{
+  cursor: default;
+  padding: 12px 12px 12px 48px;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2NjIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PGNpcmNsZSBjeD0iMTEiIGN5PSIxMSIgcj0iOCIvPjxwYXRoIGQ9Ik0yMSAyMWwtNC00Ii8+PC9zdmc+);
+  background-repeat: no-repeat;
+  background-position: 12px
+;
+} */
+</style>
+    <link rel="stylesheet" href="https://unpkg.com/@trevoreyre/autocomplete-js/dist/style.css" />
+    {%endblock%}
+{% block content %}
+<div class="body">
+  <div class="wrapper">
+    <section class="users">
+      <header>
+        <div class="content">
+          <img src="{{Me.profile_pic.url}}" alt="" />
+          <div class="details">
+            <span>{{Me.name}}</span>
+            <p>Active now</p>
+          </div>
+        </div> 
+        <!-- <a href="login.html" class="logout">Logout</a> -->
+      </header> 
+      <div >
+        {% if messages %}
+        {% for message in messages %}
+        <div class="error-text">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        <form action="" class="typing-area" method="post">
+          {% csrf_token %}
+          <div id="autocomplete" class="autocomplete">
+          <input type="text" class="input-field" name="secondP" placeholder="Search for user..." autocomplete="off"/>
+          <ul class="autocomplete-result-list"></ul>
+          </div>
+        <button type="submit" class="active"><i class="fas fa-search"></i></button>
+      </form>
+      </div>
+      <div class="users-list">
+        {% for thread in Threads%}
+        <a href="chat/{{thread.id}}">
+          {% if thread.first_person == Me %}
+          <div class="content">
+            <img src="{{thread.second_person.profile_pic.url}}" alt="" />
+            <div class="details">
+              <span>{{ thread.second_person.user.username }}</span>
+              {% else %}
+              <div class="content">
+                <img src="{{thread.first_person.profile_pic.url}}" alt="" />
+                <div class="details">
+                  <span>{{ thread.first_person.user.username }}</span>
+              {% endif %}
+              <p>{{chat}}</p>
+            </div>
+          </div>
+          <div class="status-dot"><i class="fas fa-circle"></i></div> </a
+          >{% endfor %}
+      </div>
+    </section>
+  </div>
+</div>
+<script src="https://unpkg.com/@trevoreyre/autocomplete-js"></script>
+
+
+
+
+
+    <script>
+        new Autocomplete('#autocomplete', {
+
+            search: input => {
+                console.log(input)
+                const url = `/search/?user=${(input)}`
+                return new Promise(resolve => {
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            resolve(data.data)
+                        })
+                })
+            },
+
+
+            renderResult: (result, props) => {
+                console.log(props)
+        
+                let group = ''
+                if (result.index % 3 === 0) {
+                    group = `<li class="group">Group</li>`
+                }
+                return `
+      ${group}
+      <li ${props}>
+        <div class="wiki-title">
+          ${result}
+        </div>
+        
+      </li>
+    `
+            },
+
+            // getResultValue: result => result,
+            // onSubmit: result => {
+            //     window.open(`/places/?=${(result)}`)
+            // }
+        })
+    </script>
+    
+{% endblock %}

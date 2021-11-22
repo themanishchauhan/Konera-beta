@@ -1,0 +1,36 @@
+{% extends 'base.html'%}
+ {% block content %}
+<div class="body">
+  <div class="container">
+    {% if count == 1%}
+    <h1>Congrats you are the first user</h1>
+    {% else %}
+    {% for post in posts %}
+    {% if request.user == post.user %}
+    {{pass}}    
+    {% else %}
+    <div class="box">
+      <div class="image">
+        <img src="media/{{post.profile_pic}}" />
+      </div>
+      <div class="name_job">{{post.name}}</div>
+      <div class="username">@{{post.user}}</div>
+      <p>{{post.exam_centre}}</p>
+      <div class="btns">
+        <button>
+          <a style="color: white" href="{{post.ano}}">See profile</a>
+        </button>
+        <!-- <button>
+          <form id = "form-id" method="post">{% csrf_token %}
+            <input type="hidden" name="" id="" value="{{post.name}}">
+            <a style="color: white" href="#" onclick="document.forms['form-id'].submit();">Add as friend</a>
+        </form>
+        </button> -->
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

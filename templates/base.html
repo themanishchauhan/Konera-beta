@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  {% load static%}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'CSS/home.css'%}">
+  <link rel="stylesheet" href="{% static 'CSS/style.css'%}">
+  <link rel="stylesheet" href="{% static 'CSS/header.css'%}">
+  <title>Konera | Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+  {% block css%}
+  {% endblock %}
+  <style>
+  .error-text{
+    color: #3cc098;
+    padding: 8px 10px;
+    text-align: center;
+    border-radius: 5px;
+    background: #cbebc7;
+    border: 1px solid #95c287;
+    margin-bottom: 10px;
+  }
+</style> 
+</head>
+
+<body>
+  <div class="header1"></div>
+  <header class="header">
+    <a href="" class="logo">Konera</a>
+    <input class="menu-btn" type="checkbox" id="menu-btn" />
+    <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
+    <ul class="menu">
+      <li><a href="{% url 'home'%}">Home</a></li>
+      <li><a href="{% url 'users'%}">Friends</a></li>
+      <li><a href="{% url 'feedback'%}">Feedback</a></li>
+      <li><a href="{% url 'logout'%}">Logout</a></li>
+    </ul> 
+  </header>
+  </div>
+  <div class="adver">Hii this is for ad purpose</div>
+  
+  {% block content %}
+
+
+  {% endblock %}
+</body>
+
+</html>

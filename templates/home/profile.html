@@ -1,0 +1,102 @@
+{% extends 'base.html'%} 
+{% block css %} 
+<style>
+.btns button {
+    background: #333;
+    width: 100%;
+    padding: 9px 0px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: 400;
+    color: #ffffff;
+    transition: all 0.3s linear;
+    margin: 5px;
+}
+
+.info {
+    margin: 5px;
+    margin-bottom: 15px;
+}
+
+.image {
+    margin: 10px 0;
+    height: 150px;
+    width: 150px;
+    background: #333;
+    padding: 3px;
+    border-radius: 50%;
+}
+
+img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+
+.profile-pic {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="body">
+    <div class="wrapper">
+        <section class="form signup">
+            <a href="{% url 'home'%}" class="back-icon"><i class="fas fa-arrow-left"></i></a>
+
+            <div class="profile-pic">
+                <div class="image">
+                    <img src="media/{{posts.profile_pic}}">
+                </div>
+            </div>
+            <div class="info">
+                <div class="label"><strong>Application number</strong></div>
+                <p>{{posts.ano}}</p>
+            </div>
+            <div class="info">
+                <div class="label"><strong>Full name</strong></div>
+                <p>{{posts.name}}</p>
+            </div>
+            <div class="info">
+                <div class="label"><strong>Username</strong></div>
+                <p>@{{posts.user}}</p>
+            </div>
+            <div class="info">
+                <div class="label"><strong>Date of Examination</strong></div>
+                <p>{{posts.date_of_exam}}</p>
+            </div>
+            <div class="info">
+                <div class="label"><strong>City</strong></div>
+                <p>Narnaul,Mahendregarh</p>
+            </div>
+            <div class="info">
+                <div class="label"><strong>Exam venue</strong></div>
+                <p>{{posts.exam_centre}}</p>
+            </div>
+            {% if exist %}
+            <div class="btns" style="display:block;">
+                   <a href="{% url 'users'%}"><button type="submit" >Already a Friend</button></a>
+            </div>
+            {% else %}
+            <div class="btns" style="display:block;">
+                <form action="" method="POST">
+                    {%  csrf_token %}
+                    <!-- <input type="hidden" value='{{posts.user}}' name="first_person"> -->
+                    <button type="submit" value="{{posts.name}}">Add as friend</button>
+                  </form>
+            </div>
+            {%endif%}
+
+        </section>
+    </div>
+</div>
+  {% endblock%}

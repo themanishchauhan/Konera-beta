@@ -1,0 +1,37 @@
+{% extends 'base.html'%}
+{% load static%}
+
+    {% block content %}
+    <div class="body">
+        <div class="wrapper">
+          <section class="form login">
+            <header>Welcome back!</header>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="error-text">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            <form action="#" method="POST" enctype="multipart/form-data" autocomplete="off">
+              {% csrf_token %}
+              <div class="field input">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter your username" required>
+              </div>
+              <div class="field input">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required >
+                <i class="fas fa-eye"></i>
+              </div>
+              <a href="{% url 'forget_password'%}" style="font-size: small;"> Forget password</a>
+              <div class="field button">
+                <input type="submit" name="submit" value="Login">
+              </div>
+            </form>
+            <div class="link">Not yet signed up? <a href="{% url 'register_attempt'%}">Signup now</a></div>
+      
+          </section>
+        </div>
+      </div>
+       <script src="{% static 'javascript/pass-show-hide.js'%}"></script>
+          <!--<script src="{% static 'javascript/login.js'%}"></script> -->
+    {% endblock %}

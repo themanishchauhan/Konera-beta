@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from accounts.models import Profile
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
@@ -7,7 +8,10 @@ import uuid
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate,login
-from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.contrib import messages
+from django.core import mail
 # Create your views here.
 
 
@@ -71,7 +75,7 @@ def register_attempt(request):
             auth_token = str(uuid.uuid4())
             profile_obj = Profile.objects.create(user = user_obj , auth_token = auth_token,name = name, ano = ano,date_of_exam = date_of_exam, your_address = your_address, exam_centre = exam_centre,profile_pic =profile_pic)
             profile_obj.save()
-            send_mail_after_registration(email , auth_token)
+            send_mail_after_registration(email , auth_token, name, username)
             return redirect('/token')
 
         except Exception as e:
@@ -146,20 +150,20 @@ def ForgetPassword(request):
             username = request.POST.get('username')
             
             if not User.objects.filter(username=username).first():
-                messages.success(request, 'Not user found with this username.')
-                return redirect('/forget-password/')
-            
+                messages.success(request, 'No user found with this username.')
+                return redirect('/')
+            print(username)
             user_obj = User.objects.get(username = username)
             profile_obj= Profile.objects.get(user = user_obj)
+            print(profile_obj)
             token = profile_obj.auth_token
-            us = user_obj.email
+            print(user_obj.email)
             print(token)
-            profile_obj.save()
-            send_forget_password_mail(user_obj.email , token)
-            print(us)
+            Send_forget_password_mail(user_obj.email,token,username)
+            print('hii')
             messages.success(request, 'An email is sent.')
             print('sucess')
-            return redirect('/forget-password/')
+            return redirect('/')
                 
     except Exception as e:
         print(e)
@@ -195,13 +199,6 @@ def Send_forget_password_mail(email,token,username):
     send_mail(subject, plain_message , email_from ,recipient_list,html_message=html_message)
 
 
-def forget(request):
-    # name = 'Manish Chauhan'
-    token = 'www.instagram.com'
-    email = 'manishchouhan770@gmail.com'
-    username = 'manishchauhan'
-    Send_forget_password_mail(email , token,username)
-    return HttpResponse('Sent')
 def Check(request):
     name = 'Manish Chauhan'
     token = 'www.facebook.com'
@@ -209,3 +206,13 @@ def Check(request):
     username = 'manishchauhan'
     send_mail_after_registration(email , token, name, username)
     return HttpResponse('Sent')
+
+
+def forget(request):
+    # name = 'Manish Chauhan'
+    token = 'www.instagram.com'
+    email = 'manishchouhan770@gmail.com'
+    username = 'manishchauhan'
+    Send_forget_password_mail(email , token,username)
+    return HttpResponse('Sent')
+

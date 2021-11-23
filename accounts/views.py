@@ -193,3 +193,19 @@ def Send_forget_password_mail(email,token,username):
     html_message = render_to_string('email/forget_password.html',context)
     plain_message = strip_tags(html_message)
     send_mail(subject, plain_message , email_from ,recipient_list,html_message=html_message)
+
+
+def forget(request):
+    # name = 'Manish Chauhan'
+    token = 'www.instagram.com'
+    email = 'manishchouhan770@gmail.com'
+    username = 'manishchauhan'
+    Send_forget_password_mail(email , token,username)
+    return HttpResponse('Sent')
+def Check(request):
+    name = 'Manish Chauhan'
+    token = 'www.facebook.com'
+    email = 'manishchouhan770@gmail.com'
+    username = 'manishchauhan'
+    send_mail_after_registration(email , token, name, username)
+    return HttpResponse('Sent')

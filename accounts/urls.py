@@ -11,6 +11,8 @@ urlpatterns = [
     path('error' , views.error_page , name="error"),
     path('forget-password/' , views.ForgetPassword , name="forget_password"),
     path('change-password/<token>/' , views.ChangePassword , name="change_password"),
+    path('check', views.Check , name='Check'),
+    path('forget', views.forget , name='forget')
  
     
    

@@ -169,18 +169,27 @@ def ForgetPassword(request):
 
 
 
-def send_mail_after_registration(email , token):
-    subject = 'Your accounts need to be verified'
-    message = f'Hi paste the link to verify your account http://127.0.0.1:8000/verify/{token}'
+def send_mail_after_registration(email , token, name, username):
+    subject = f'{name}, Activate Your Account!'
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email]
-    send_mail(subject, message , email_from ,recipient_list )
-    
+    context = {
+        'name': name,
+        'username':username,
+        'token':token,
+    }
+    html_message = render_to_string('email/activate_account.html',context)
+    plain_message = strip_tags(html_message)
+    send_mail(subject, plain_message , email_from ,recipient_list,html_message=html_message)
 
-def send_forget_password_mail(email , token ):
-    subject = 'Your forget password link'
-    message = f'Hi , click on the link to reset your password http://127.0.0.1:8000/change-password/{token}/'
+def Send_forget_password_mail(email,token,username):
+    subject = 'Reset Password!'
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = [email]
-    send_mail(subject, message, email_from, recipient_list)
-    return True
+    recipient_list = [email] 
+    context = {
+        'username':username,
+        'token':token,
+    }
+    html_message = render_to_string('email/forget_password.html',context)
+    plain_message = strip_tags(html_message)
+    send_mail(subject, plain_message , email_from ,recipient_list,html_message=html_message)
